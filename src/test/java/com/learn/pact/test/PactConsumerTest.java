@@ -20,12 +20,12 @@ import static org.springframework.http.HttpStatus.OK;
 public class PactConsumerTest {
 
     @Rule
-    public PactProviderRuleMk2 rule = new PactProviderRuleMk2("provider",
+    public PactProviderRuleMk2 rule = new PactProviderRuleMk2("test-provider",
             "localhost",
             9080,
             this);
 
-    @Pact(consumer = "consumer")
+    @Pact(consumer = "test-consumer")
     public RequestResponsePact buildPact(final PactDslWithProvider pactbuilder) {
 
         Map<String, String> headers = new HashMap<>();
@@ -48,7 +48,7 @@ public class PactConsumerTest {
 
     @Test
     @PactVerification
-    public void testProducerPact() {
+    public void testConsumerPact() {
         // when
         ResponseEntity<String> response = new RestTemplate()
                 .getForEntity(rule.getUrl() + "/hello-world", String.class);
