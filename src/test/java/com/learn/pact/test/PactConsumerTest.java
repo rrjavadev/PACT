@@ -2,26 +2,22 @@ package com.learn.pact.test;
 
 import au.com.dius.pact.consumer.Pact;
 import au.com.dius.pact.consumer.PactProviderRuleMk2;
-import au.com.dius.pact.consumer.PactRule;
 import au.com.dius.pact.consumer.PactVerification;
-import au.com.dius.pact.consumer.dsl.DslPart;
 import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.model.RequestResponsePact;
-import org.apache.http.HttpResponse;
-import org.assertj.core.api.Assertions;
 import org.junit.Rule;
 import org.junit.Test;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpStatus.OK;
 
-public class PactTest {
-
-    private DslPart helloWorldResults;
+public class PactConsumerTest {
 
     @Rule
     public PactProviderRuleMk2 rule = new PactProviderRuleMk2("provider",
@@ -31,11 +27,6 @@ public class PactTest {
 
     @Pact(consumer = "consumer")
     public RequestResponsePact buildPact(final PactDslWithProvider pactbuilder) {
-
-        helloWorldResults = new PactDslJsonBody()
-                .id()
-                .stringType("content")
-                .asBody();
 
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
@@ -48,14 +39,19 @@ public class PactTest {
                 .willRespondWith()
                 .status(200)
                 .headers(headers)
-                .body(helloWorldResults)
+                .body(new PactDslJsonBody()
+                        .id()
+                        .stringType("content")
+                        .asBody())
                 .toPact();
     }
 
     @Test
     @PactVerification
-    public void testProducerPact() throws IOException {
-        Consumer consumer = new Consumer("http://localhost:9080");
-        assertEquals(200, consumer.getResponseStatus());
+    public void testProducerPact() {
+        // when
+        ResponseEntity<String> response = new RestTemplate()
+                .getForEntity(rule.getUrl() + "/hello-world", String.class);
+        assertThat(response.getStatusCode()).isEqualTo(OK);
     }
 }
