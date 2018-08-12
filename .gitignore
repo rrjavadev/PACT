@@ -4,3 +4,5 @@ tmp/
 .classpath
 .gradle/
 build/
+*.xml
+build/

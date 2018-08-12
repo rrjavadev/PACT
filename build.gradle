@@ -9,6 +9,7 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath("io.spring.gradle:dependency-management-plugin:0.6.0.RELEASE")
+        classpath("au.com.dius:pact-jvm-consumer-junit_2.11:${pactVersion}")
     }
 }
 
@@ -31,10 +32,11 @@ test {
 }
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter:2.0.2.RELEASE")
-    testCompile('org.springframework.boot:spring-boot-starter-test:2.0.4.RELEASE')
+    compile('org.springframework.boot:spring-boot-starter:2.0.2.RELEASE')
+    compile('org.springframework.boot:spring-boot-starter-test:2.0.4.RELEASE')
     testCompile('io.rest-assured:rest-assured:3.0.2')
     testCompile("au.com.dius:pact-jvm-consumer-junit_2.11:${pactVersion}")
+    testCompile("au.com.dius:pact-jvm-provider-junit_2.11:3.5.0")
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
