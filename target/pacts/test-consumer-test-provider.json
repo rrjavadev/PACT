@@ -1,0 +1,73 @@
+{
+    "provider": {
+        "name": "test-provider"
+    },
+    "consumer": {
+        "name": "test-consumer"
+    },
+    "interactions": [
+        {
+            "description": "GET REQUEST",
+            "request": {
+                "method": "GET",
+                "path": "/hello-world"
+            },
+            "response": {
+                "status": 200,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "id": 1234567890,
+                    "content": "string"
+                },
+                "matchingRules": {
+                    "body": {
+                        "$.id": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.content": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        }
+                    }
+                },
+                "generators": {
+                    "body": {
+                        "$.id": {
+                            "type": "RandomInt",
+                            "min": 0,
+                            "max": 2147483647
+                        },
+                        "$.content": {
+                            "type": "RandomString",
+                            "size": 20
+                        }
+                    }
+                }
+            },
+            "providerStates": [
+                {
+                    "name": "test GET"
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "pact-specification": {
+            "version": "3.0.0"
+        },
+        "pact-jvm": {
+            "version": "3.5.0"
+        }
+    }
+}

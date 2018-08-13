@@ -17,15 +17,16 @@ import org.springframework.web.context.ConfigurableWebApplicationContext;
 @PactFolder("pacts")
 public class PactProducerTest {
     @TestTarget
-    public final Target target = new HttpTarget("http", "localhost", 8080, "/hello-world");
+    public final Target target = new HttpTarget(8080);
 
     private static ConfigurableWebApplicationContext applicationContext;
 
-    public void setUp(){
+    public void setUp() {
         applicationContext = (ConfigurableWebApplicationContext)
                 SpringApplication.run(PactProducer.class);
     }
 
     @State("test GET")
-    public void toGetState() { }
+    public void toGetState() {
+    }
 }
